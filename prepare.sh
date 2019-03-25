@@ -9,7 +9,7 @@
 # $2 Target Folder( Output Folder)
 # $3 Stemmer
 
-WIKI2VEC_VERSION="1.0"
+WIKI2FECK_VERSION="1.0"
 
 usage ()
 {
@@ -31,7 +31,7 @@ TARGET_DIR="$2"
 LANGUAGE=`echo $1 | sed "s/_.*//g"`
 WDIR="$BASE_DIR/working"
 SPARK_PATH="$WDIR/spark-1.2.0-bin-hadoop2.4"
-JAR_PATH="$BASE_DIR/target/scala-2.10/wiki2vec-assembly-${WIKI2VEC_VERSION}.jar"
+JAR_PATH="$BASE_DIR/target/scala-2.10/wiki2feck_${WIKI2FECK_VERSION}.jar"
 READABLEWIKI="$TARGET_DIR/${LANGUAGE}wiki-latest.lines"
 SPLIT_OUTPUT_CORPUS="$WDIR/${LANGUAGE}wiki"
 OUTPUTCORPUS="$TARGET_DIR/${LANGUAGE}wiki.corpus"
@@ -64,15 +64,16 @@ mkdir -p $SPLIT_OUTPUT_CORPUS
 cd $WDIR
 
 echo "Downloading Wikipedia Dump"
-curl -L -O "http://dumps.wikimedia.org/${LANGUAGE}wiki/latest/${LANGUAGE}wiki-latest-pages-articles-multistream.xml.bz2"
-WIKIPEDIA_PATH="$WDIR/${LANGUAGE}wiki-latest-pages-articles-multistream.xml.bz2"
+WIKI_DUMP_NAME="${LANGUAGE}wiki-latest-pages-articles-multistream.xml.bz2"
+curl -L -O "http://dumps.wikimedia.org/${LANGUAGE}wiki/latest/${WIKI_DUMP_NAME}"
+WIKIPEDIA_PATH="$WDIR/${WIKI_DUMP_NAME}"
 
 echo "Downloading Apache Spark"
 curl "http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz" | tar xvz
 
 
 # Compiling
-echo "Compiling wiki2vec..."
+echo "Compiling wiki2feck..."
 cd $BASE_DIR
 sbt assembly
 
@@ -81,17 +82,17 @@ sbt assembly
 echo "Creating Readable Wiki.."
 java -Xmx10G -Xms10G -cp $JAR_PATH org.idio.wikipedia.dumps.CreateReadableWiki $WIKIPEDIA_PATH $READABLEWIKI
 
-# Create Wiki2Vec Corpus
+# Create Wiki2Feck Corpus
 echo "Creating Word2vec Corpus"
 $SPARK_PATH/bin/spark-submit --driver-memory 15g --num-executors 4 --class org.idio.wikipedia.word2vec.Word2VecCorpus $JAR_PATH $READABLEWIKI $BASE_DIR/fakePathToRedirect/file.nt $SPLIT_OUTPUT_CORPUS $STEMMERNAME
 
 # joining split files
 echo "Joining corpus.."
 cd $SPLIT_OUTPUT_CORPUS
-cat part* >> $OUTPUTCORPUS
+cat part* >> $OUTPUTCORPUS.tmp
 
 echo "fixing up punctutation in final corpus"
 cd $BASE_DIR
-python resources/fix_corpus.py $OUTPUTCORPUS ${OUTPUTCORPUS}.fixed
+python resources/fix_corpus.py $OUTPUTCORPUS.tmp ${OUTPUTCORPUS}
 
 echo " ^___^ corpus : ${OUTPUTCORPUS}.fixed"

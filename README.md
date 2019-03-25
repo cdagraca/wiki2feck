@@ -1,4 +1,4 @@
-# Wiki2Vec
+# Wiki2Feck
 
 Utilities for creating Word2Vec vectors for Dbpedia Entities via a Wikipedia Dump.
 
@@ -44,9 +44,9 @@ You can download via torrent one of the prebuilt word2vec models:
 
 - Once you get `language.corpus` go to `resources/gensim` and do:
 
-  `wiki2vec.sh pathToCorpus pathToOutputFile <MIN_WORD_COUNT> <VECTOR_SIZE> <WINDOW_SIZE>`
+  `wiki2feck.sh pathToCorpus pathToOutputFile <MIN_WORD_COUNT> <VECTOR_SIZE> <WINDOW_SIZE>`
 
-this will install all requiered dependencies for Gensim and build word2vec vectors.
+this will install all required dependencies for Gensim and build word2vec vectors.
 
 i.e:
 
@@ -96,8 +96,7 @@ params:
  - path to output readable wikipedia
 i.e:
 
-`java -Xmx10G -Xms10G -cp org.idio.wikipedia.dumps.ReadableWiki wiki2vec-assembly-1.0.jar path-to-wiki-dump/eswiki-20150105-pages-articles-multistream.xml.bz2 pathTo/output/ReadableWikipedia`
-
+`java -Xmx10G -Xms10G -cp wiki2feck-assembly-1.0.jar org.idio.wikipedia.dumps.CreateReadableWiki path-to-wiki-dump/eswiki-20150105-pages-articles-multistream.xml.bz2 pathTo/output/ReadableWikipedia`
 
 ### Word2Vec Corpus
 
@@ -125,7 +124,7 @@ DbpediaID/Barack_Obama B.O is the president of DbpediaID/USA
 2. Download Spark : http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz
 3. In your Spark folder do:
   ```
-  bin/spark-submit --master local[*] --executor-memory 1g --class "org.idio.wikipedia.word2vec.Word2VecCorpus"  target/scala-2.10/wiki2vec-assembly-1.0.jar   /PathToYourReadableWiki/readableWiki.lines /Path/To/RedirectsFile /PathToOut/Word2vecReadyWikipediaCorpus
+  bin/spark-submit --master local[*] --executor-memory 1g --class "org.idio.wikipedia.word2vec.Word2VecCorpus"  target/scala-2.10/wiki2feck-assembly-1.0.jar   /PathToYourReadableWiki/readableWiki.lines /Path/To/RedirectsFile /PathToOut/Word2vecReadyWikipediaCorpus
   ```
 4. Feed your corpus to a word2vec tool
 
@@ -142,7 +141,7 @@ pass None as an extra argument
 #### If you are manually running the tools:
 Pass None as an extra argument when calling spark
  ```
- bin/spark-submit --class "org.idio.wikipedia.word2vec.Word2VecCorpus"  target/scala-2.10/wiki2vec-assembly-1.0.jar   /PathToYourReadableWiki/readableWiki.lines /Path/To/RedirectsFile /PathToOut/Word2vecReadyWikipediaCorpus None
+ bin/spark-submit --class "org.idio.wikipedia.word2vec.Word2VecCorpus"  target/scala-2.10/wiki2feck-assembly-1.0.jar   /PathToYourReadableWiki/readableWiki.lines /Path/To/RedirectsFile /PathToOut/Word2vecReadyWikipediaCorpus None
  ```
 
 

@@ -1,15 +1,15 @@
-import AssemblyKeys._
 
-assemblySettings
-
-name := "wiki2vec"
+name := "wiki2feck"
 
 version := "1.0"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.12"
+crossScalaVersions  := Seq("2.11.2", "2.10.4")
 
 resolvers ++= Seq(
-  "opennlp sourceforge repo" at "http://opennlp.sourceforge.net/maven2"
+  "opennlp sourceforge repo" at "http://opennlp.sourceforge.net/maven2",
+  Resolver.jcenterRepo,
+  "Twitter Maven Repository" at "https://maven.twttr.com"
 )
 
 libraryDependencies += "com.google.guava" % "guava" % "16.0.1"
@@ -28,7 +28,10 @@ libraryDependencies += "com.bizo" % "mighty-csv_2.10" % "0.2"
 
 libraryDependencies += "net.debasishg" %% "redisclient" % "2.13"
 
-libraryDependencies += "org.scalanlp" %% "chalk" % "1.3.2"  exclude ("com.typesafe.sbt", "sbt-pgp")
+libraryDependencies += "org.scalanlp" % "chalk_2.10" % "1.3.2"  excludeAll (
+  ExclusionRule(organization = "com.typesafe.sbt", name = "sbt-pgp"),
+  ExclusionRule(organization = "com.typesafe.akka")
+  )
 
 libraryDependencies += "org.apache.opennlp" % "opennlp-tools" % "1.5.2-incubating"
 

@@ -21,14 +21,14 @@ import re
 import string
 from gensim import utils
 
-replace_punctuation = string.maketrans(string.punctuation, ' '*len(string.punctuation))
+replace_punctuation = str.maketrans(string.punctuation, ' '*len(string.punctuation))
 
 class PreprocessingLineSentence():
     def __init__(self, path_to_corpus):
         self.path = path_to_corpus
 
     def __iter__(self):
-        with utils.smart_open(self.path) as fin:
+        with utils.smart_open(self.path, encoding='ISO-8859-1') as fin:
             for line_no, line in enumerate(fin):
                 if line_no % 10000 == 0:
                     ln.debug("Processed %s lines" % line_no)
@@ -55,13 +55,13 @@ class PreprocessingLineSentence():
 def fix_corpus(path_to_corpus, outfile=None):
     fixed = PreprocessingLineSentence(path_to_corpus)
     outfile = outfile or path_to_corpus + "_fixed"
-    with open(outfile, "w") as f:
+    with open(outfile, "w", encoding='ISO-8859-1') as f:
         for line in fixed:
             f.write(line)
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) == 2:
+    if len(sys.argv) > 2:
         fix_corpus(sys.argv[1], sys.argv[2])
     else:
         fix_corpus(sys.argv[1])

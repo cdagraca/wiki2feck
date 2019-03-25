@@ -402,10 +402,22 @@ public abstract class WikipediaPage  {
      *
      * @param page the <code>WikipediaPage</code> object
      * @param s raw XML string
+     * @param title page title string
      */
-    public static String readPage(WikipediaPage page, String s) {
+    public static String readPage(WikipediaPage page, String s, String title) {
+        if (title != null) page.title = title;
         page.page = s;
         return page.getContent();
+    }
+
+    /**
+     * Reads a raw XML string into a <code>WikipediaPage</code> object.
+     *
+     * @param page the <code>WikipediaPage</code> object
+     * @param s raw XML string
+     */
+    public static String readPage(WikipediaPage page, String s) {
+        return readPage(page, s, null);
     }
 
     /**

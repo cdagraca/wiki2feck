@@ -33,16 +33,16 @@ class Word2VecCorpus(pathToReadableWiki:String, redirectStore:RedirectStore, pat
   * Returns a PairRDD (WikiTitle, ArticleText)
   * Out of a readable wikipedia
   * */
-  private def getPairRDD(articlesLines:RDD[String])={
+  private def getPairRDD(articlesLines:RDD[String]): RDD[(String, String)]={
     articlesLines.map{ line =>
-      val splitLine = line.split("\t")
-      try {
-        val wikiTitle = splitLine(0)
-        val articleText = splitLine(1)
-        (wikiTitle, articleText)
-      }catch{
-        case _ => ("", "")
-      }
+        val splitLine = line.split("\t")
+        try {
+          val wikiTitle = splitLine(0)
+          val articleText = splitLine(1)
+          (wikiTitle, articleText)
+        } catch {
+          case _: Throwable => ("", "")
+        }
     }
   }
 
@@ -59,7 +59,7 @@ class Word2VecCorpus(pathToReadableWiki:String, redirectStore:RedirectStore, pat
         val wikiModel = new EnglishWikipediaPage()
 
         // cleans wikimedia markup
-        val pageContent = WikipediaPage.readPage(wikiModel, text)
+        val pageContent = WikipediaPage.readPage(wikiModel, text, title)
 
         // cleans further Style tags {| some CSS inside |}
         val markupClean = ArticleCleaner.cleanStyle(pageContent)
@@ -118,9 +118,9 @@ class Word2VecCorpus(pathToReadableWiki:String, redirectStore:RedirectStore, pat
         val stemmer = try{
                           new SnowballStemmer(language_local)
                     }catch{
-                      case _=> new NoStemmer()
+                      case _: Throwable => new NoStemmer()
                 }
-         line.split("\\s").map{
+        line.split("\\s").map{
             word =>
                word match{
                  case w if w.startsWith(prefix) => w
@@ -149,18 +149,17 @@ object Word2VecCorpus{
     val pathToRedirects =  args(1)
     val pathToOutput = args(2)
     val language = try { args(3) }catch{
-         case _ => {
+         case _ : Throwable => {
            println("Warning: Stemming is deactivated..")
            "NoStemmer"
          }
     }
 
-
     println("Path to Readable Wikipedia: "+ pathToReadableWikipedia)
     println("Path to Wikipedia Redirects: " + pathToRedirects)
     println("Path to Output Corpus : " + pathToOutput)
 
-    val conf = new SparkConf().setAppName("Wiki2Vec corpus creator")
+    val conf = new SparkConf().setAppName("Wiki2Feck corpus creator")
 
     implicit val sc: SparkContext = new SparkContext(conf)
 
@@ -175,8 +174,6 @@ object Word2VecCorpus{
          new EmptyRedirectStore(pathToRedirects)
       }
     }
-
-
 
     val word2vecCorpusCreator = new Word2VecCorpus(pathToReadableWikipedia, redirectStore, pathToOutput, language)
     word2vecCorpusCreator.getWord2vecCorpus()

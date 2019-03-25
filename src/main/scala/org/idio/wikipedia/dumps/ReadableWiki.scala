@@ -34,7 +34,9 @@ class ReadableWiki(pathToWikipediaDump: String, pathToOutFile: String){
       parser.getContentHandler.setRevisionCallback(new RevisionCallback {
         override def callback(revision: Revision): Unit = {
           val page = revision.getPage
-          val title = page.getTitle
+          //TODO: add the ":" back in here if/when the stratio wikipedia-parser's title splitting is fixed
+          // (at present it leaves a leading ":" on the title if there is a non-empty namespace)
+          val title = page.getNamespace + page.getTitle
           val articleText =  revision.getText.replace("\t", " ").replace("\n"," ")
           val line = List[String](title, articleText).mkString("\t") + "\n"
           writer.write(line)

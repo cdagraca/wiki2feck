@@ -44,7 +44,7 @@ object ArticleCleaner {
           val canonicalDbpediaId = redirectStore.getCanonicalId(dbpediaId)
           processLink(surfaceForm, canonicalDbpediaId)
         } catch {
-          case _ => {
+          case _ : Throwable=> {
             println("error with link: " + linkMatch.toString())
             ""
           }

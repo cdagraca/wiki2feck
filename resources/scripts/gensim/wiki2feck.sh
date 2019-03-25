@@ -3,7 +3,7 @@
 #| Idio Wiki2Vec                                                                      |                                                                                                     |
 #+------------------------------------------------------------------------------------------------------------------------------+
 
-# Creates Wiki2Vec vectors out of massaged wikipedia corpus
+# Creates Wiki2Feck vectors out of massaged wikipedia corpus
 # It uses gensim
 
 CORPUS=$1

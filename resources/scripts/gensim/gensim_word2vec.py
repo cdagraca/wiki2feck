@@ -7,7 +7,7 @@ logFormatter = logging.Formatter("%(asctime)s %(levelname)-8s %(name)-18s: %(mes
 
 ln = logging.getLogger()
 
-fileHandler = logging.FileHandler("wiki2vec_log%s.txt" % datetime.datetime.now().isoformat())
+fileHandler = logging.FileHandler("wiki2feck_log%s.txt" % datetime.datetime.now().isoformat())
 
 fileHandler.setFormatter(logFormatter)
 ln.addHandler(fileHandler)
@@ -41,9 +41,8 @@ def read_corpus(path_to_corpus, output_path, min_count=10, size=500, window=10, 
     workers = multiprocessing.cpu_count()
     entity_min_count = _entity_min_count
     sentences = gensim.models.word2vec.LineSentence(path_to_corpus)
-    model = gensim.models.Word2Vec(None, min_count=min_count, size=size, window=window, sg=1, workers=workers, trim_rule=rule)
-    model.build_vocab(sentences)
-    model.train(sentences)
+    model = gensim.models.Word2Vec(sentences, min_count=min_count, size=size, window=window, sg=1, workers=workers, trim_rule=rule)
+    model.train(sentences, total_examples=model.corpus_count, epochs=model.iter)
     model.save(output_path)
 
 
@@ -60,7 +59,7 @@ def main():
 
     parser.add_option("-e", "--entity_min_count",
                       action="store",
-                      dest="entity_min_count",
+                      dest="_entity_min_count",
                       default=5,
                       type="int",
                       help="min number of apperances for DBpedia entities",)
